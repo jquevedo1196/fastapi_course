@@ -2,6 +2,7 @@ from fastapi import FastAPI, Body, Query, Path
 from typing import Optional
 
 from models.Person import Person
+from models.Location import Location
 
 app = FastAPI()
 
@@ -63,6 +64,10 @@ def show_person(
             title="Person identifier",
             description="This is a required element",
         ),
-        person: Person = Body(...)
+        person: Person = Body(...),
+        location: Location = Body(...),
 ):
-    return {person_id: person}
+    results = person.dict()
+    results.update(location.dict())
+    person.dict()
+    return {person_id: results}
