@@ -70,4 +70,4 @@ def show_person(
     results = person.dict()
     results.update(location.dict())
     person.dict()
-    return {person_id: results}
+    return person

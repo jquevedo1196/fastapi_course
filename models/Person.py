@@ -1,6 +1,5 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
-from enum import Enum
 
 from enums.HairColors import HairColor
 
@@ -22,4 +21,17 @@ class Person(BaseModel):
         le=150
     )
     hair_color: HairColor = Field(None)
-    is_married_color: Optional[bool] = Field(None)
+    is_married: Optional[bool] = Field(None)
+    email: EmailStr = Field(...)
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "first_name": "Jesus",
+                "last_name": "Quevedo",
+                "age": 25,
+                "hair_color": "black",
+                "is_married": False,
+                "email": "algo@algo.com"
+            }
+        }
