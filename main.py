@@ -27,7 +27,7 @@ def create_person(person: Person = Body(...)):
     return f"Hola {person.first_name} {person.last_name}"
 
 
-@app.get("/person/detail")
+@app.get("/person/detail", deprecated=True)
 def show_person(
         name: Optional[str] = Query(
             None,
@@ -49,14 +49,14 @@ def show_person(
 
 persons = [1, 2, 3, 4, 5]
 
-@app.get("/person/detail/{person_id}")
+@app.get("/person/detail/{person_id}", tags=["Persons"])
 def show_person(
         person_id: int = Path(
             ...,
             gt=0,
             lt=100000,
             title="Person identifier",
-            description="This is a required element",
+            description="This is a required element"
         )
 ):
     if person_id not in persons:
@@ -67,7 +67,7 @@ def show_person(
     return {person_id: "It exist!"}
 
 
-@app.put("/person/{person_id}", status_code=status.HTTP_200_OK)
+@app.put("/person/{person_id}", status_code=status.HTTP_200_OK, tags=["Persons"])
 def show_person(
         person_id: int = Path(
             ...,
@@ -76,7 +76,7 @@ def show_person(
             description="This is a required element",
         ),
         person: Person = Body(...),
-        location: Location = Body(...),
+        location: Location = Body(...)
 ):
     results = person.dict()
     results.update(location.dict())
@@ -121,11 +121,19 @@ def contact(
 
 @app.post(
     path="/post-image",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    summary="Upload image to user profile"
 )
 def post_image(
         image: UploadFile = File(...)
 ):
+    """
+    Upload image file
+
+    This path operation upload an image for the user
+    :param image: The image to save in DB
+    :return: Some information of image uploaded
+    """
     return {
         "FileName": image.filename,
         "Format": image.content_type,
