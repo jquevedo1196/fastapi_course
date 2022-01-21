@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Body, Query, Path, status, Form, Header, Cookie, UploadFile, File
 from typing import Optional
+
+from fastapi import FastAPI, Body, Query, Path, status, Form, Header, Cookie, UploadFile, File, HTTPException
 
 from pydantic import EmailStr
 
@@ -46,6 +47,8 @@ def show_person(
     return {name: age}
 
 
+persons = [1, 2, 3, 4, 5]
+
 @app.get("/person/detail/{person_id}")
 def show_person(
         person_id: int = Path(
@@ -56,6 +59,11 @@ def show_person(
             description="This is a required element",
         )
 ):
+    if person_id not in persons:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No existe el usuario"
+        )
     return {person_id: "It exist!"}
 
 
